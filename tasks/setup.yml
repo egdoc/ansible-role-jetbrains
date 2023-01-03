@@ -1,0 +1,89 @@
+---
+- name: Retrieve and set IDE facts
+  ansible.builtin.import_tasks:
+    file: set_facts.yml
+
+- name: Verify the IDE version is not already installed
+  ansible.builtin.stat:
+    path: '{{ ide_directory }}'
+  register: ide_directory_info
+
+- name: Download and install IDE
+  when: not ide_directory_info.stat.exists
+  block:
+    - name: Download IDE tarball
+      ansible.builtin.get_url:
+        url: '{{ ide_download_url }}'
+        dest: '{{ ide_tarball_path }}'
+        checksum: 'sha256:{{ ide_checksum_url }}'
+        timeout: 30
+        mode: '644'
+
+    - name: Ensure installation directory exists on target
+      ansible.builtin.file:
+        path: '{{ ide_directory }}'
+        state: directory
+        owner: root
+        group: root
+        mode: '755'
+
+    - name: Extract tarball
+      ansible.builtin.unarchive:
+        src: '{{ ide_tarball_path }}'
+        dest: '{{ ide_directory }}'
+        list_files: true
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+  rescue:
+    - name: Ensure installation directory is removed
+      ansible.builtin.file:
+        path: '{{ ide_directory }}'
+        state: absent
+
+
+- name: Read product-info.json
+  ansible.builtin.command: cat {{ ide_directory }}/product-info.json
+  register: cat
+  changed_when: false
+
+- name: Save json data to variable
+  ansible.builtin.set_fact:
+    product_info: '{{ cat.stdout | from_json }}'
+
+- name: Ensure desktop launcher exists
+  ansible.builtin.template:
+    src: templates/launcher.desktop.j2
+    dest: '/usr/local/share/applications/{{ product_info.launch.0.startupWmClass }}.desktop'
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Ensure link to executable exists
+  ansible.builtin.file:
+    src: '{{ ide_directory }}/{{ product_info.launch.0.launcherPath }}'
+    dest: /usr/local/bin/{{ product_info.name | lower }}
+    state: link
+    owner: root
+    group: root
+
+- name: Ensure downloaded tarball is removed
+  ansible.builtin.file:
+    path: '{{ ide_tarball_path }}'
+    state: absent
+  when: jetbrains_remove_tarball_after_installation | bool
+
+- name: Find previously installed IDE versions
+  ansible.builtin.find:
+    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}'
+    file_type: directory
+    recurse: false
+    excludes: '{{ ide_effective_version }}'
+  register: other_versions
+
+- name: Ensure previously installed IDE versions are removed
+  ansible.builtin.file:
+    path: '{{ item.path }}'
+    state: absent
+  loop: '{{ other_versions.files }}'
+  when: jetbrains_remove_other_versions | bool

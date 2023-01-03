@@ -1,0 +1,14 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Invoke IDE format command
+      ansible.builtin.command: /usr/local/bin/pycharm format .
+      failed_when: false
+      changed_when: false
+      register: command
+
+    - name: Assert command executed successfully
+      ansible.builtin.assert:
+        that: command.rc == 0

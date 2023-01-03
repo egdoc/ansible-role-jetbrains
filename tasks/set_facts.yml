@@ -1,0 +1,31 @@
+---
+- name: Request IDE information
+  ansible.builtin.uri:
+    url: '{{ jetbrains_releases_url }}?code={{ ide.code }}&type=release'
+  register: releases
+
+- name: Register IDE available versions
+  ansible.builtin.set_fact:
+    ide_available_versions: '{{ releases.json[ide.code] | map(attribute="version") }}'
+
+- name: Verify requested IDE version is valid
+  ansible.builtin.assert:
+    that: 'ide.version in ide_available_versions'
+    msg: 'version {{ ide.version }} not found, availables ones are: {{ ide_available_versions }}'
+  when: ide.version | lower != 'latest'
+
+- name: Set IDE effective version
+  ansible.builtin.set_fact:
+    ide_effective_version: '{{ (ide.version == "latest") | ternary(ide_available_versions | first, ide.version) }}'
+
+- name: Set IDE and checksum file URL
+  ansible.builtin.set_fact:
+    ide_download_url: '{{ release_downloads_info.link }}'
+    ide_checksum_url: '{{ release_downloads_info.checksumLink }}'
+  vars:
+    release_downloads_info: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide_effective_version) | first).downloads.linux }}'
+
+- name: Set IDE directory and tarball path
+  ansible.builtin.set_fact:
+    ide_directory: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
+    ide_tarball_path: '{{ jetbrains_download_dir }}/{{ jetbrains_code_map[ide.code] }}-{{ ide_effective_version }}'

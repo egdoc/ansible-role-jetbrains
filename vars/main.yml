@@ -1,0 +1,17 @@
+---
+jetbrains_releases_url: https://data.services.jetbrains.com/products/releases
+jetbrains_code_map:
+  CL: clion
+  DG: datagrip
+  DS: dataspell
+  GO: goland
+  IIC: intellij-idea-community
+  IIU: intellij-idea-ultimate
+  IIE: Intellij-idea-educational
+  PCC: pycharm-community
+  PCP: pycharm-professional
+  PCE: pycharm-educational
+  PS: phpstorm
+  RD: rider
+  RM: rubymine
+  WS: webstorm

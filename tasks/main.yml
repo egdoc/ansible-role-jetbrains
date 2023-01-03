@@ -1,0 +1,7 @@
+---
+- name: Install ide
+  ansible.builtin.include_tasks:
+    file: setup.yml
+  with_items: '{{ jetbrains_ide }}'
+  loop_control:
+    loop_var: ide

@@ -1,0 +1,18 @@
+galaxy_info:
+  author: egdoc
+  role_name: jetbrains
+  description: Ansible role to install Jetbrains IDEs
+  license: GPLv2
+  min_ansible_version: '2.1'
+  platforms:
+    - name: GenericLinux
+      version: all
+  galaxy_tags:
+    - jetbrains
+    - phpstorm
+    - webstorm
+    - pycharm
+    - ide
+    - linux
+
+dependencies: []

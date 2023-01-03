@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  roles:
+    - role: egdoc.jetbrains
+      jetbrains_ide:
+        - code: PCC
+          version: 2022.3.1
