@@ -1,0 +1,28 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check Ide executable
+      block:
+        - name: stat /opt/phpstorm/bin/phpstorm.sh
+          ansible.builtin.stat:
+            path: /opt/phpstorm/bin/phpstorm.sh
+          register: ide_executable
+
+        - name: Check if /opt/phpstorm/bin/phpstorm.sh is in place
+          ansible.builtin.assert:
+            that:
+              - ide_executable.stat.exists == true
+
+    - name: Check Ide desktop launcher
+      block:
+        - name: stat /usr/local/share/applications/phpstorm.desktop
+          ansible.builtin.stat:
+            path: /usr/local/share/applications/phpstorm.desktop
+          register: ide_desktop_file
+
+        - name: Check if /usr/local/share/applications/phpstorm.desktop exists
+          ansible.builtin.assert:
+            that:
+              - ide_desktop_file.stat.exists == true

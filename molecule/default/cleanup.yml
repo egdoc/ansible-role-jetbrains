@@ -1,0 +1,8 @@
+---
+- name: Cleanup
+  hosts: localhost
+  tasks:
+    - name: "Make sure downloaded tarball doesn't exist"
+      ansible.builtin.file:
+        path: /tmp/phpstorm.tar.gz
+        state: absent

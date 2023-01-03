@@ -1,0 +1,31 @@
+---
+ide_releases_url: https://data.services.jetbrains.com/products/releases
+jetbrains_ide:
+  pycharm-community:
+    name: Pycharm Community Edition
+    code: PCC
+    executable: bin/pycharm.sh
+    icon: bin/pycharm.svg
+    startup_wm_class: jetbrains-pycharm-ce
+    comment: Python IDE for Professional Developers
+  pycharm:
+    name: Pycharm
+    code: PCP
+    executable: bin/pycharm.sh
+    icon: bin/pycharm.svg
+    startup_wm_class: jetbrains-pycharm
+    comment: Python IDE for Professional Developers
+  phpstorm:
+    name: PhpStorm
+    code: PS
+    executable: bin/phpstorm.sh
+    icon: bin/phpstorm.svg
+    startup_wm_class: jetbrains-phpstorm
+    comment: Lightning-Smart PHP IDE
+  webstorm:
+    name: WebStorm
+    code: WS
+    executable: bin/webstorm.sh
+    icon: bin/webstorm.svg
+    startup_wm_class: jetbrains-webstorm
+    comment: Smartest JavaScript IDE
