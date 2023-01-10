@@ -56,5 +56,5 @@
 
 - name:
   ansible.builtin.template:
-    src: templates/pycharm.desktop.j2
+    src: templates/launcher.desktop.j2
     dest: '{{ ide_launcher_dir }}/{{ ide }}.desktop'
