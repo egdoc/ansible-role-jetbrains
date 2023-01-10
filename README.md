@@ -10,18 +10,18 @@ are two possible installation modes:
 
 | Installation mode | Application files | Application launcher
 |-------------------|-------------------|---------------------
-| system | /opt/{{ ide }} | /usr/local/share/applications/{{ ide }}.desktop
-| user | ~/.local/share/opt/{{ ide }} | ~/.local/share/applications/{{ ide }}.desktop
+| system | /opt/{{ jetbrains_ide }} | /usr/local/share/applications/{{ jetbrains_ide }}.desktop
+| user | ~/.local/share/opt/{{ jetbrains_ide }} | ~/.local/share/applications/{{ jetbrains_ide }}.desktop
 
 Role Variables
 --------------
 
 | Variable | Use | Default value
 |-------------|-------|---------------------
-ide | The IDE to install (list of supported ones will be updated) | pycharm-community
-ide_version | The IDE version to install | latest
-ide_local_download_dir | Directory where the tarball should be downloaded on the __control__ node | /tmp
-ide_installation_mode  | Installation mode: system vs user | user
+jetbrains_ide | The IDE to install (list of supported ones will be updated) | pycharm-community
+jetbrains_ide_version | The IDE version to install | latest
+jetbrains_ide_local_download_dir | Directory where the tarball should be downloaded on the __control__ node | /tmp
+jetbrains_ide_installation_mode  | Installation mode: system vs user | user
 
 Dependencies
 ------------
@@ -35,8 +35,8 @@ System-level installation of PhpStorm:
     - hosts: workstations
       roles:
         - role: egdoc.jetbrains
-          ide_installation_mode: system
-          ide: phpstorm
+          jetbrains_ide_installation_mode: system
+          jetbrains_ide: phpstorm
           become: true
 
 User-level installation:
@@ -44,7 +44,7 @@ User-level installation:
     - hosts: workstations
       roles:
         - role: egdoc.jetbrains
-          ide: phpstorm
+          jetbrains_ide: phpstorm
 
 
 License

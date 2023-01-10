@@ -1,6 +1,6 @@
 ---
-ide_releases_url: https://data.services.jetbrains.com/products/releases
-jetbrains_ide:
+jetbrains_ide_releases_url: https://data.services.jetbrains.com/products/releases
+jetbrains_ide_info:
   pycharm-community:
     name: Pycharm Community Edition
     code: PCC
