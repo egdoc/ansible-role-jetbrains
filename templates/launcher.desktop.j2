@@ -1,12 +1,12 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name={{ jetbrains_ide_info[jetbrains_ide].name }}
-Icon={{ ide_unpack_dir | expanduser }}/{{ jetbrains_ide }}/{{ jetbrains_ide_info[jetbrains_ide].icon }}
-Exec="{{ ide_unpack_dir | expanduser }}/{{ jetbrains_ide }}/{{ jetbrains_ide_info[jetbrains_ide].executable }}" %f
-Comment={{ jetbrains_ide_info[jetbrains_ide].comment }}
+Name={{ jetbrains_ide_info[ide_name].name }}
+Icon={{ unpack_dir | expanduser }}/{{ ide_name }}/{{ jetbrains_ide_info[ide_name].icon }}
+Exec="{{ unpack_dir | expanduser }}/{{ ide_name }}/{{ jetbrains_ide_info[ide_name].executable }}" %f
+Comment={{ jetbrains_ide_info[ide_name].comment }}
 Categories=Development;IDE
 Terminal=false
-StartupWMClass={{ jetbrains_ide_info[jetbrains_ide].startup_wm_class }}
+StartupWMClass={{ jetbrains_ide_info[ide_name].startup_wm_class }}
 Keywords=programming;programmer;development;developer;code;
 StartupNotify=true

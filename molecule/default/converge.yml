@@ -6,6 +6,7 @@
       include_role:
         name: "egdoc.jetbrains"
       vars:
-        jetbrains_ide: phpstorm
-        jetbrains_ide_version: 2022.3.1
+        jetbrains_ide:
+          - name: phpstorm
+            version: 2022.3.1
         jetbrains_ide_installation_mode: system

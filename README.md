@@ -18,8 +18,7 @@ Role Variables
 
 | Variable | Use | Default value
 |-------------|-------|---------------------
-jetbrains_ide | The IDE to install (list of supported ones will be updated) | pycharm-community
-jetbrains_ide_version | The IDE version to install | latest
+jetbrains_ide | The list of IDEs to install (list of supported ones will be updated) | []
 jetbrains_ide_local_download_dir | Directory where the tarball should be downloaded on the __control__ node | /tmp
 jetbrains_ide_installation_mode  | Installation mode: system vs user | user
 
@@ -30,22 +29,16 @@ python3-jmespath
 Example Playbook
 ----------------
 
-System-level installation of PhpStorm:
+User-level installation of latest version of Pycharm Community Edition and version 2022.3.1 of PhpStorm:
 
     - hosts: workstations
       roles:
         - role: egdoc.jetbrains
-          jetbrains_ide_installation_mode: system
-          jetbrains_ide: phpstorm
-          become: true
-
-User-level installation:
-
-    - hosts: workstations
-      roles:
-        - role: egdoc.jetbrains
-          jetbrains_ide: phpstorm
-
+          vars:
+            jetbrains_ide:
+              - name: phpstorm
+                version: '2022.3.1'
+              - pycharm-community
 
 License
 -------

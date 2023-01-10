@@ -1,5 +1,4 @@
 ---
-jetbrains_ide: pycharm-community
-jetbrains_ide_version: latest
+jetbrains_ide: []
 jetbrains_ide_local_download_dir: /tmp
 jetbrains_ide_installation_mode: user

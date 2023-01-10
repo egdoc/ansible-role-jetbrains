@@ -1,0 +1,59 @@
+- name: Set ide version fact
+  ansible.builtin.set_fact:
+    ide_version: '{{ outer_item.version | default("latest") | string }}'
+    ide_name: '{{ (outer_item is string) | ternary(outer_item, outer_item.name) }}'
+
+- name: Request Ide information
+  ansible.builtin.uri:
+    url: '{{ jetbrains_ide_releases_url }}?code={{ jetbrains_ide_info[ide_name].code }}&type=release'
+  register: ide_releases_response
+
+- name: Get releases versions list
+  ansible.builtin.set_fact:
+    ide_available_versions: '{{ ide_releases_response.json[jetbrains_ide_info[ide_name].code] | map(attribute="version")  }}'
+
+- name: Verify selected version is valid
+  ansible.builtin.assert:
+    that: 'ide_version in ide_available_versions'
+    msg: '{{ ide_name }} version {{ ide_version }} does not exist, availables ones are: {{ ide_available_versions }}'
+  when: ide_version != 'latest'
+
+- name: Get latest available version
+  ansible.builtin.set_fact:
+    ide_version: '{{ ide_available_versions | first }}'
+  when: ide_version == 'latest'
+
+- name: Download and verify ide tarball
+  ansible.builtin.get_url:
+    url: '{{ ide_releases_response.json | community.general.json_query(ide_url_query) | first }}'
+    dest: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}.tar.gz'
+    checksum: 'sha256:{{ ide_releases_response.json | community.general.json_query(ide_hash_url_query) | first }}'
+  vars:
+    ide_url_query:  "{{ jetbrains_ide_info[ide_name].code}}[?version == '{{ ide_version }}'].downloads.linux.link"
+    ide_hash_url_query: "{{ jetbrains_ide_info[ide_name].code }}[?version == '{{ ide_version }}'].downloads.linux.checksumLink"
+  delegate_to: 127.0.0.1
+
+- name: Determine unpack and launcher directories
+  ansible.builtin.set_fact:
+    unpack_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/opt", "~/.local/opt") }}'
+    launcher_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/usr/local/share/applications", "~/.local/share/applications") }}'
+
+- name: Ensure directories exist
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+  loop:
+    - '{{ unpack_dir }}/{{ ide_name }}'
+    - '{{ launcher_dir }}'
+
+- name: Extract tarball
+  ansible.builtin.unarchive:
+    src: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}.tar.gz'
+    dest: '{{ unpack_dir }}/{{ ide_name }}'
+    extra_opts:
+      --strip-components=1
+
+- name:
+  ansible.builtin.template:
+    src: templates/launcher.desktop.j2
+    dest: '{{ launcher_dir }}/{{ ide_name }}.desktop'
