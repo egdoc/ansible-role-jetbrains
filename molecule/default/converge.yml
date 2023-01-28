@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     - name: "Include egdoc.jetbrains"
-      include_role:
+      ansible.builtin.include_role:
         name: "egdoc.jetbrains"
       vars:
         jetbrains_ide:

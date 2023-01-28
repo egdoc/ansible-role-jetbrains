@@ -20,7 +20,7 @@
   tasks:
     - name: Check Ide executable
       block:
-        - name: stat /opt/phpstorm/bin/phpstorm.sh
+        - name: Stat /opt/phpstorm/bin/phpstorm.sh
           ansible.builtin.stat:
             path: /opt/phpstorm/bin/phpstorm.sh
           register: ide_executable
@@ -32,7 +32,7 @@
 
     - name: Check Ide desktop launcher
       block:
-        - name: stat /usr/local/share/applications/phpstorm.desktop
+        - name: Stat /usr/local/share/applications/phpstorm.desktop
           ansible.builtin.stat:
             path: /usr/local/share/applications/phpstorm.desktop
           register: ide_desktop_file
@@ -44,7 +44,12 @@
 
     - name: Check launcher content is as expected
       block:
-        - ansible.builtin.shell: cat /usr/local/share/applications/phpstorm.desktop
+        - name: Get launcher content
+          ansible.builtin.command: cat /usr/local/share/applications/phpstorm.desktop
           register: cat
-        - ansible.builtin.assert:
+          changed_when: false
+          failed_when: false
+
+        - name: Assert content of launcher is as expected
+          ansible.builtin.assert:
             that: '{{ cat.stdout == desktop_launcher_content }}'
