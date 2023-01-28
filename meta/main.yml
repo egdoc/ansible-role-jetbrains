@@ -3,7 +3,18 @@ galaxy_info:
   role_name: jetbrains
   description: Ansible role to install Jetbrains IDEs
   license: GPLv2
-  min_ansible_version: 2.1
+  min_ansible_version: '2.1'
+  platforms:
+    - name: Fedora
+      version: all
+    - name: EL
+      version:
+        - 8
+        - 9
+    - name: Debian
+      version:
+        - Buster
+        - Bullseye
   galaxy_tags:
     - jetbrains
     - phpstorm
