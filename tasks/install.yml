@@ -10,7 +10,7 @@
 
 - name: Get releases versions list
   ansible.builtin.set_fact:
-    ide_available_versions: '{{ ide_releases_response.json[jetbrains_ide_info[ide_name].code] | map(attribute="version")  }}'
+    ide_available_versions: '{{ ide_releases_response.json[jetbrains_ide_info[ide_name].code] | map(attribute="version") }}'
 
 - name: Verify selected version is valid
   ansible.builtin.assert:
@@ -29,7 +29,7 @@
     dest: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}.tar.gz'
     checksum: 'sha256:{{ ide_releases_response.json | community.general.json_query(ide_hash_url_query) | first }}'
   vars:
-    ide_url_query:  "{{ jetbrains_ide_info[ide_name].code}}[?version == '{{ ide_version }}'].downloads.linux.link"
+    ide_url_query:  "{{ jetbrains_ide_info[ide_name].code }}[?version == '{{ ide_version }}'].downloads.linux.link"
     ide_hash_url_query: "{{ jetbrains_ide_info[ide_name].code }}[?version == '{{ ide_version }}'].downloads.linux.checksumLink"
   delegate_to: 127.0.0.1
 
@@ -53,7 +53,7 @@
     extra_opts:
       --strip-components=1
 
-- name:
+- name: Ensure launcher is in place
   ansible.builtin.template:
     src: templates/launcher.desktop.j2
     dest: '{{ launcher_dir }}/{{ ide_name }}.desktop'
