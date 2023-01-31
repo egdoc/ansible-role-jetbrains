@@ -2,8 +2,8 @@
 Version=1.0
 Type=Application
 Name={{ jetbrains_ide_info[ide_name].name }}
-Icon={{ unpack_dir | expanduser }}/{{ jetbrains_ide_info[ide_name].icon }}
-Exec="{{ unpack_dir | expanduser }}/{{ jetbrains_ide_info[ide_name].executable }}" %f
+Icon={{ jetbrains_ide_data_dir | expanduser }}/{{ jetbrains_ide_info[ide_name].icon }}
+Exec="{{ jetbrains_ide_data_dir | expanduser }}/{{ jetbrains_ide_info[ide_name].executable }}" %f
 Comment={{ jetbrains_ide_info[ide_name].comment }}
 Categories=Development;IDE
 Terminal=false

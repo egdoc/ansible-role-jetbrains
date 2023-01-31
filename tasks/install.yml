@@ -33,27 +33,26 @@
     ide_hash_url_query: "{{ jetbrains_ide_info[ide_name].code }}[?version == '{{ ide_version }}'].downloads.linux.checksumLink"
   delegate_to: 127.0.0.1
 
-- name: Determine unpack and launcher directories
+- name: Set data dir
   ansible.builtin.set_fact:
-    unpack_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/opt", "~/.local/opt") }}/{{ ide_name }}-{{ ide_version }}'
-    launcher_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/usr/local/share/applications", "~/.local/share/applications") }}'
+    jetbrains_ide_data_dir: '{{ jetbrains_ide_data_dir }}/{{ ide_name }}-{{ ide_version }}'
 
 - name: Ensure directories exist
   ansible.builtin.file:
     path: '{{ item }}'
     state: directory
   loop:
-    - '{{ unpack_dir }}'
-    - '{{ launcher_dir }}'
+    - '{{ jetbrains_ide_data_dir }}'
+    - '{{ jetbrains_ide_launcher_dir }}'
 
 - name: Extract tarball
   ansible.builtin.unarchive:
     src: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}-{{ ide_version }}.tar.gz'
-    dest: '{{ unpack_dir }}'
+    dest: '{{ jetbrains_ide_data_dir }}'
     extra_opts:
       - --strip-components=1
 
 - name: Ensure launcher is in place
   ansible.builtin.template:
     src: templates/launcher.desktop.j2
-    dest: '{{ launcher_dir }}/{{ ide_name }}.desktop'
+    dest: '{{ jetbrains_ide_launcher_dir }}/{{ ide_name }}.desktop'

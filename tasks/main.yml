@@ -1,8 +1,11 @@
 ---
 - name: Verify installation mode
   ansible.builtin.assert:
-    that: 'jetbrains_ide_installation_mode in [ "system", "user" ]'
+    that: 'jetbrains_ide_installation_mode | lower in [ "system", "user" ]'
     msg: 'Invalid installation mode, valid ones: "system", "user"'
+
+- name: Source installation mode specific variables
+  ansible.builtin.include_vars: '{{ jetbrains_ide_installation_mode | lower }}.yml'
 
 - name: Install ide
   ansible.builtin.include_tasks:
