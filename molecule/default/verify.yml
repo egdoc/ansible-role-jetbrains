@@ -8,8 +8,8 @@
       Version=1.0
       Type=Application
       Name=PhpStorm
-      Icon=/opt/phpstorm/bin/phpstorm.svg
-      Exec="/opt/phpstorm/bin/phpstorm.sh" %f
+      Icon=/opt/phpstorm-2022.3.1/bin/phpstorm.svg
+      Exec="/opt/phpstorm-2022.3.1/bin/phpstorm.sh" %f
       Comment=Lightning-Smart PHP IDE
       Categories=Development;IDE
       Terminal=false
@@ -18,31 +18,31 @@
       StartupNotify=true
 
   tasks:
-    - name: Check Ide executable
+    - name: Check IDE executable
       block:
-        - name: Stat /opt/phpstorm/bin/phpstorm.sh
+        - name: Test executable
           ansible.builtin.stat:
-            path: /opt/phpstorm/bin/phpstorm.sh
+            path: /opt/phpstorm-2022.3.1/bin/phpstorm.sh
           register: ide_executable
 
-        - name: Check if /opt/phpstorm/bin/phpstorm.sh is in place
+        - name: Assert executable exists
           ansible.builtin.assert:
             that:
               - ide_executable.stat.exists == true
 
-    - name: Check Ide desktop launcher
+    - name: Test Ide desktop launcher
       block:
-        - name: Stat /usr/local/share/applications/phpstorm.desktop
+        - name: Stat desktop launcher
           ansible.builtin.stat:
             path: /usr/local/share/applications/phpstorm.desktop
           register: ide_desktop_file
 
-        - name: Check if /usr/local/share/applications/phpstorm.desktop exists
+        - name: Assert desktop launcher exists
           ansible.builtin.assert:
             that:
               - ide_desktop_file.stat.exists == true
 
-    - name: Check launcher content is as expected
+    - name: Test launcher content is as expected
       block:
         - name: Get launcher content
           ansible.builtin.command: cat /usr/local/share/applications/phpstorm.desktop

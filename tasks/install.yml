@@ -26,7 +26,7 @@
 - name: Download and verify ide tarball
   ansible.builtin.get_url:
     url: '{{ ide_releases_response.json | community.general.json_query(ide_url_query) | first }}'
-    dest: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}.tar.gz'
+    dest: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}-{{ ide_version }}.tar.gz'
     checksum: 'sha256:{{ ide_releases_response.json | community.general.json_query(ide_hash_url_query) | first }}'
   vars:
     ide_url_query:  "{{ jetbrains_ide_info[ide_name].code }}[?version == '{{ ide_version }}'].downloads.linux.link"
@@ -35,7 +35,7 @@
 
 - name: Determine unpack and launcher directories
   ansible.builtin.set_fact:
-    unpack_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/opt", "~/.local/opt") }}'
+    unpack_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/opt", "~/.local/opt") }}/{{ ide_name }}-{{ ide_version }}'
     launcher_dir: '{{ (jetbrains_ide_installation_mode == "system") | ternary("/usr/local/share/applications", "~/.local/share/applications") }}'
 
 - name: Ensure directories exist
@@ -43,15 +43,15 @@
     path: '{{ item }}'
     state: directory
   loop:
-    - '{{ unpack_dir }}/{{ ide_name }}'
+    - '{{ unpack_dir }}'
     - '{{ launcher_dir }}'
 
 - name: Extract tarball
   ansible.builtin.unarchive:
-    src: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}.tar.gz'
-    dest: '{{ unpack_dir }}/{{ ide_name }}'
+    src: '{{ jetbrains_ide_local_download_dir }}/{{ ide_name }}-{{ ide_version }}.tar.gz'
+    dest: '{{ unpack_dir }}'
     extra_opts:
-      --strip-components=1
+      - --strip-components=1
 
 - name: Ensure launcher is in place
   ansible.builtin.template:
