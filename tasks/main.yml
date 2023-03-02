@@ -7,11 +7,6 @@
 - name: Source installation mode specific variables
   ansible.builtin.include_vars: '{{ jetbrains_ide_installation_mode | lower }}.yml'
 
-- name: Ensure jmsepath is installed
-  ansible.builtin.pip:
-    name: jmespath
-  delegate_to: 127.0.0.1
-
 - name: Install ide
   ansible.builtin.include_tasks:
     file: install.yml
