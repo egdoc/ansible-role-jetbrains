@@ -66,6 +66,7 @@
     state: link
     owner: root
     group: root
+  when: jetbrains_link_executable | bool
 
 - name: Ensure downloaded tarball is removed
   ansible.builtin.file:

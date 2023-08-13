@@ -31,6 +31,10 @@ Controls whether previously installed IDE versions are removed after installatio
 
 The URL used to retrieve information about IDEs
 
+        jetbrains_link_executable: true
+
+Whether to create a link to the IDE executable under /usr/local/bin
+
         jetbrains_code_map:
             CL: clion
             DG: datagrip
