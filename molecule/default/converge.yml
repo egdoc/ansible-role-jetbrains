@@ -4,6 +4,7 @@
   gather_facts: false
   roles:
     - role: egdoc.jetbrains
+      jetbrains_link_executable: true
       jetbrains_ide:
         - code: PCC
           version: 2022.3.1
