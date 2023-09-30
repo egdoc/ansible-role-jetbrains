@@ -3,44 +3,22 @@
   ansible.builtin.import_tasks:
     file: set_facts.yml
 
-- name: Verify the IDE version is not already installed
-  ansible.builtin.stat:
+- name: Ensure installation directory exists on target
+  ansible.builtin.file:
     path: '{{ ide_directory }}'
-  register: ide_directory_info
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
 
-- name: Download and install IDE
-  when: not ide_directory_info.stat.exists
-  block:
-    - name: Download IDE tarball
-      ansible.builtin.get_url:
-        url: '{{ ide_download_url }}'
-        dest: '{{ ide_tarball_path }}'
-        checksum: 'sha256:{{ ide_checksum_url }}'
-        timeout: 30
-        mode: '644'
-
-    - name: Ensure installation directory exists on target
-      ansible.builtin.file:
-        path: '{{ ide_directory }}'
-        state: directory
-        owner: root
-        group: root
-        mode: '755'
-
-    - name: Extract tarball
-      ansible.builtin.unarchive:
-        src: '{{ ide_tarball_path }}'
-        dest: '{{ ide_directory }}'
-        list_files: true
-        remote_src: true
-        extra_opts:
-          - --strip-components=1
-  rescue:
-    - name: Ensure installation directory is removed
-      ansible.builtin.file:
-        path: '{{ ide_directory }}'
-        state: absent
-
+- name: Extract tarball
+  ansible.builtin.unarchive:
+    src: '{{ ide_download_url }}'
+    dest: '{{ ide_directory }}'
+    list_files: true
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
 
 - name: Read product-info.json
   ansible.builtin.command: cat {{ ide_directory }}/product-info.json
@@ -67,12 +45,6 @@
     owner: root
     group: root
   when: jetbrains_link_executable | bool
-
-- name: Ensure downloaded tarball is removed
-  ansible.builtin.file:
-    path: '{{ ide_tarball_path }}'
-    state: absent
-  when: jetbrains_remove_tarball_after_installation | bool
 
 - name: Find previously installed IDE versions
   ansible.builtin.find:

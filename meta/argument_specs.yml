@@ -33,10 +33,6 @@ argument_specs:
             required: true
       jetbrains_installation_dir:
         type: str
-      jetbrains_download_dir:
-        type: str
-      jetbrains_remove_tarball_after_installation:
-        type: bool
       jetbrains_remove_other_versions:
         type: bool
       jetbrains_link_executable:

@@ -11,17 +11,9 @@ Role Variables
 
 The list of dictionaries describing IDEs and versions to install (see example)
 
-        jetbrains_download_dir: /tmp
-
-The directory where to download IDE tarballs
-
         jetbrains_installation_dir: /opt/jetbrains
 
 The root installation directory
-
-        jetbrains_remove_tarballs_after_installation: true
-
-Controls whether the downloaded IDE tarball is removed after installation
 
         jetbrains_remove_other_versions: true
 

@@ -18,14 +18,9 @@
   ansible.builtin.set_fact:
     ide_effective_version: '{{ (ide.version == "latest") | ternary(ide_available_versions | first, ide.version) }}'
 
-- name: Set IDE and checksum file URL
+- name: Set IDE download URL and installation directory
   ansible.builtin.set_fact:
     ide_download_url: '{{ release_downloads_info.link }}'
-    ide_checksum_url: '{{ release_downloads_info.checksumLink }}'
+    ide_directory: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
   vars:
     release_downloads_info: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide_effective_version) | first).downloads.linux }}'
-
-- name: Set IDE directory and tarball path
-  ansible.builtin.set_fact:
-    ide_directory: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
-    ide_tarball_path: '{{ jetbrains_download_dir }}/{{ jetbrains_code_map[ide.code] }}-{{ ide_effective_version }}'

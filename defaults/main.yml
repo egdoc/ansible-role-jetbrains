@@ -1,7 +1,5 @@
 ---
 jetbrains_ide: []
 jetbrains_installation_dir: /opt/jetbrains
-jetbrains_download_dir: /tmp
-jetbrains_remove_tarball_after_installation: true
 jetbrains_remove_other_versions: true
 jetbrains_link_executable: false
