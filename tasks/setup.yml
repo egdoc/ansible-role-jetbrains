@@ -21,13 +21,13 @@
       - --strip-components=1
 
 - name: Read product-info.json
-  ansible.builtin.command: cat {{ ide_directory }}/product-info.json
-  register: cat
-  changed_when: false
+  ansible.builtin.slurp:
+    src: '{{ ide_directory }}/product-info.json'
+  register: product_info
 
 - name: Save json data to variable
   ansible.builtin.set_fact:
-    product_info: '{{ cat.stdout | from_json }}'
+    product_info: '{{ product_info.content | b64decode | from_json }}'
 
 - name: Ensure desktop launcher exists
   ansible.builtin.template:
