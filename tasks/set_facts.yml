@@ -1,9 +1,4 @@
 ---
-- name: Request IDE information
-  ansible.builtin.uri:
-    url: '{{ jetbrains_releases_url }}?code={{ ide.code }}&type=release'
-  register: releases
-
 - name: Register IDE available versions
   ansible.builtin.set_fact:
     ide_available_versions: '{{ releases.json[ide.code] | map(attribute="version") }}'
