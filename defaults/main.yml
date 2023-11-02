@@ -3,3 +3,4 @@ jetbrains_ide: []
 jetbrains_installation_dir: /opt/jetbrains
 jetbrains_remove_other_versions: true
 jetbrains_link_executable: false
+jetbrains_force_reinstall: false

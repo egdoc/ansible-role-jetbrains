@@ -27,6 +27,12 @@ The URL used to retrieve information about IDEs
 
 Whether to create a link to the IDE executable under /usr/local/bin
 
+        jetbrains_force_reinstall: false
+
+Whether to force re-installation of the IDE even if it appears to be
+installed (directory exists). This can be useful if you want to be
+sure all files are in place.
+
         jetbrains_code_map:
             CL: clion
             DG: datagrip

@@ -37,3 +37,6 @@ argument_specs:
         type: bool
       jetbrains_link_executable:
         type: bool
+      jetbrains_force_reinstall:
+        type: bool
+        default: false
