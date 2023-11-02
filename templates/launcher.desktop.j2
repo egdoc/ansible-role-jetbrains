@@ -2,8 +2,8 @@
 Version=1.0
 Type=Application
 Name={{ product_info.name }}
-Icon={{ ide_directory }}/{{ product_info.svgIconPath }}
-Exec="{{ ide_directory }}/{{ product_info.launch.0.launcherPath }}" %f
+Icon={{ created_ide_directory.path }}/{{ product_info.svgIconPath }}
+Exec="{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}" %f
 Categories=Development;IDE
 Terminal=false
 StartupWMClass={{ product_info.launch.0.startupWmClass }}

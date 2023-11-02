@@ -12,10 +12,3 @@
 - name: Set IDE effective version
   ansible.builtin.set_fact:
     ide_effective_version: '{{ (ide.version == "latest") | ternary(ide_available_versions | first, ide.version) }}'
-
-- name: Set IDE download URL and installation directory
-  ansible.builtin.set_fact:
-    ide_download_url: '{{ release_downloads_info.link }}'
-    ide_directory: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
-  vars:
-    release_downloads_info: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide_effective_version) | first).downloads.linux }}'

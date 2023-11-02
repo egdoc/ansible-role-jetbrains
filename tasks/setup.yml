@@ -5,16 +5,17 @@
 
 - name: Ensure installation directory exists on target
   ansible.builtin.file:
-    path: '{{ ide_directory }}'
+    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
     state: directory
     owner: root
     group: root
     mode: '755'
+  register: created_ide_directory
 
 - name: Extract tarball
   ansible.builtin.unarchive:
-    src: '{{ ide_download_url }}'
-    dest: '{{ ide_directory }}'
+    src: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide_effective_version) | first).downloads.linux.link }}'
+    dest: '{{ created_ide_directory.path }}'
     list_files: true
     remote_src: true
     extra_opts:
@@ -22,7 +23,7 @@
 
 - name: Read product-info.json
   ansible.builtin.slurp:
-    src: '{{ ide_directory }}/product-info.json'
+    src: '{{ created_ide_directory.path }}/product-info.json'
   register: product_info
 
 - name: Save json data to variable
@@ -39,7 +40,7 @@
 
 - name: Ensure link to executable exists
   ansible.builtin.file:
-    src: '{{ ide_directory }}/{{ product_info.launch.0.launcherPath }}'
+    src: '{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}'
     dest: /usr/local/bin/{{ product_info.name | lower }}
     state: link
     owner: root
@@ -48,10 +49,10 @@
 
 - name: Find previously installed IDE versions
   ansible.builtin.find:
-    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}'
+    path: '{{ created_ide_directory.path | dirname }}'
     file_type: directory
     recurse: false
-    excludes: '{{ ide_effective_version }}'
+    excludes: '{{ created_ide_directory.path | basename }}'
   register: other_versions
 
 - name: Ensure previously installed IDE versions are removed
