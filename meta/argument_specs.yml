@@ -40,3 +40,12 @@ argument_specs:
       jetbrains_force_reinstall:
         type: bool
         default: false
+      jetbrains_launcher_dir:
+        type: str
+        default: /usr/local/share/applications
+      jetbrains_binary_dir:
+        type: str
+        default: /usr/local/bin
+      jetbrains_user:
+        type: str
+        default: root
