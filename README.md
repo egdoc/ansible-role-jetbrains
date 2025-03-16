@@ -70,16 +70,14 @@ None
 Example Playbook
 ----------------
 
-Install the latest version of Pycharm Community Edition and version 2022.3.1 of PhpStorm:
+Install version 2022.3.1 of PhpStorm:
 
     - hosts: workstations
       roles:
         - role: egdoc.jetbrains
           jetbrains_ide:
             - code: PS
-              version: '2022.3.1'
-            - code: PCC
-              version: latest
+              version: 2022.3.1
 
 License
 -------

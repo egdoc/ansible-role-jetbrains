@@ -1,11 +1,17 @@
 ---
-- name: Retrieve and set IDE facts
-  ansible.builtin.import_tasks:
-    file: set_facts.yml
+- name: Register IDE available versions
+  ansible.builtin.set_fact:
+    ide_available_versions: '{{ releases.json[ide.code] | map(attribute="version") }}'
+
+- name: Verify requested IDE version is valid
+  ansible.builtin.assert:
+    that: 'ide.version in ide_available_versions'
+    msg: 'version {{ ide.version }} not found, availables ones are: {{ ide_available_versions }}'
+  when: ide.version | lower != 'latest'
 
 - name: Ensure installation directory exists on target
   ansible.builtin.file:
-    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide_effective_version }}'
+    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[ide.code] }}/{{ ide.version }}'
     state: directory
     owner: '{{ jetbrains_user }}'
     group: '{{ jetbrains_user }}'
@@ -14,7 +20,7 @@
 
 - name: Extract tarball
   ansible.builtin.unarchive:
-    src: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide_effective_version) | first).downloads.linux.link }}'
+    src: '{{ (releases.json[ide.code] | selectattr("version", "eq", ide.version) | first).downloads.linux.link }}'
     dest: '{{ created_ide_directory.path }}'
     list_files: true
     remote_src: true
