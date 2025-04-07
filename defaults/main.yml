@@ -1,5 +1,4 @@
 ---
-jetbrains_ide: []
 jetbrains_installation_dir: /opt/jetbrains
 jetbrains_launcher_dir: /usr/local/share/applications
 jetbrains_binary_dir: /usr/local/bin

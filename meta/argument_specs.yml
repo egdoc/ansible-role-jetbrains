@@ -5,32 +5,27 @@ argument_specs:
     description: Ansible role to install Jetbrains IDEs on Linux
     author: Egidio Docile
     options:
-      jetbrains_ide:
-        type: list
+      jetbrains_ide_version:
+        type: str
         required: true
-        elements: dict
-        options:
-          code:
-            type: str
-            required: true
-            choices:
-              - CL
-              - DG
-              - DS
-              - GO
-              - IIC
-              - IIU
-              - IIE
-              - PCC
-              - PCP
-              - PCE
-              - PS
-              - RD
-              - RM
-              - WS
-          version:
-            type: str
-            required: true
+      jetbrains_ide_code:
+        type: str
+        required: true
+        choices:
+          - CL
+          - DG
+          - DS
+          - GO
+          - IIC
+          - IIU
+          - IIE
+          - PCC
+          - PCP
+          - PCE
+          - PS
+          - RD
+          - RM
+          - WS
       jetbrains_installation_dir:
         type: str
       jetbrains_remove_other_versions:

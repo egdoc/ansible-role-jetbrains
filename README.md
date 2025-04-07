@@ -2,14 +2,17 @@ Ansible Role: Jetbrains
 ==================
 
 Ansible role to install Jetbrains IDEs on Linux. The role downloads, verifies,
-and installs the selected IDEs. It also creates desktop launchers.
+and installs the selected IDE. It also creates desktop launchers.
 
 Role Variables
 --------------
+        jetbrains_ide_code
 
-        jetbrains_ide: []
+The code of the Jetbrains IDE you want to download and install (see table below)
 
-The list of dictionaries describing IDEs and versions to install (see example)
+        jetbrains_ide_version
+
+The version of the Jetbrains IDE you want to download and install (e.g: 2023.3.1)
 
         jetbrains_installation_dir: /opt/jetbrains
 
@@ -21,19 +24,19 @@ Controls whether previously installed IDE versions are removed after installatio
 
         jetbrains_releases_url: https://data.services.jetbrains.com/products/releases
 
-The URL used to retrieve information about IDEs
+The URL used to retrieve information about the IDE
 
         jetbrains_launcher_dir: /usr/local/share/applications
 
-The directory where IDEs launchers will be created
+The directory where IDE launcher will be created
 
         jetbrains_binary_dir: /usr/local/bin
 
-The directory where links to IDEs executables will be created
+The directory where links to the IDE executable will be created
 
         jetbrains_user: root
 
-The user who will own IDEs files and directories
+The user who will own IDE files and directories
 
         jetbrains_link_executable: false
 
@@ -75,9 +78,8 @@ Install version 2022.3.1 of PhpStorm:
     - hosts: workstations
       roles:
         - role: egdoc.jetbrains
-          jetbrains_ide:
-            - code: PS
-              version: 2022.3.1
+          jetbrains_ide_code: PS
+          jetbrains_ide_version: 2022.3.1
 
 License
 -------
