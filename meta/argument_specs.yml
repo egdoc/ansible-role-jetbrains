@@ -11,21 +11,6 @@ argument_specs:
       jetbrains_ide_code:
         type: str
         required: true
-        choices:
-          - CL
-          - DG
-          - DS
-          - GO
-          - IIC
-          - IIU
-          - IIE
-          - PCC
-          - PCP
-          - PCE
-          - PS
-          - RD
-          - RM
-          - WS
       jetbrains_installation_dir:
         type: str
       jetbrains_remove_other_versions:

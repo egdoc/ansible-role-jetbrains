@@ -1,12 +1,12 @@
 ---
 - name: Request IDE information
   ansible.builtin.uri:
-    url: '{{ jetbrains_releases_url }}?code={{ jetbrains_ide_code }}'
-  register: releases
+    url: '{{ jetbrains_products_url }}?code={{ jetbrains_ide_code }}'
+  register: products
 
 - name: Register IDE available versions
   ansible.builtin.set_fact:
-    ide_available_versions: '{{ releases.json[jetbrains_ide_code] | map(attribute="version") }}'
+    ide_available_versions: '{{ products.json.0.releases | map(attribute="version") }}'
 
 - name: Verify requested IDE version is valid
   ansible.builtin.assert:
@@ -15,7 +15,7 @@
 
 - name: Ensure installation directory exists on target
   ansible.builtin.file:
-    path: '{{ jetbrains_installation_dir }}/{{ jetbrains_code_map[jetbrains_ide_code] }}/{{ jetbrains_ide_version }}'
+    path: '{{ jetbrains_installation_dir }}/{{ products.json.0.name | lower | replace(" ", "-") }}/{{ jetbrains_ide_version }}'
     state: directory
     owner: '{{ jetbrains_user }}'
     group: '{{ jetbrains_user }}'
@@ -24,7 +24,7 @@
 
 - name: Extract tarball
   ansible.builtin.unarchive:
-    src: '{{ (releases.json[jetbrains_ide_code] | selectattr("version", "eq", jetbrains_ide_version) | first).downloads.linux.link }}'
+    src: '{{ (products.json.0.releases | selectattr("version", "eq", jetbrains_ide_version) | first).downloads.linux.link }}'
     dest: '{{ created_ide_directory.path }}'
     list_files: true
     remote_src: true

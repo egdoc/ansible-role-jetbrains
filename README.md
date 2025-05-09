@@ -8,7 +8,7 @@ Role Variables
 --------------
         jetbrains_ide_code
 
-The code of the Jetbrains IDE you want to download and install (see table below)
+The code of the Jetbrains IDE you want to download and install
 
         jetbrains_ide_version
 
@@ -47,24 +47,6 @@ Whether to create a link to the IDE executable under `jetbrains_binary_dir`
 Whether to force re-installation of the IDE even if it appears to be
 installed (directory exists). This can be useful if you want to be
 sure all files are in place.
-
-        jetbrains_code_map:
-            CL: clion
-            DG: datagrip
-            DS: dataspell
-            GO: goland
-            IIC: intellij-idea-community
-            IIU: intellij-idea-ultimate
-            IIE: IntelliJ-idea-educational
-            PCC: pycharm-community
-            PCP: pycharm-professional
-            PCE: pycharm-educational
-            PS: phpstorm
-            RD: rider
-            RM: rubymine
-            WS: webstorm
-
-The map between IDE codes and names
 
 Dependencies
 ------------
