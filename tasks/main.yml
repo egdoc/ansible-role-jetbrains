@@ -4,14 +4,12 @@
     url: '{{ jetbrains_products_url }}?code={{ jetbrains_ide_code }}'
   register: products
 
-- name: Register IDE available versions
-  ansible.builtin.set_fact:
-    ide_available_versions: '{{ products.json.0.releases | map(attribute="version") }}'
-
 - name: Verify requested IDE version is valid
   ansible.builtin.assert:
     that: 'jetbrains_ide_version in ide_available_versions'
     msg: 'version {{ jetbrains_ide_version }} not found, availables ones are: {{ ide_available_versions }}'
+  vars:
+    ide_available_versions: '{{ products.json.0.releases | map(attribute="version") }}'
 
 - name: Ensure installation directory exists on target
   ansible.builtin.file:
@@ -35,28 +33,29 @@
 - name: Read product-info.json
   ansible.builtin.slurp:
     src: '{{ created_ide_directory.path }}/product-info.json'
-  register: product_info
+  register: read_product_info
 
-- name: Save json data to variable
-  ansible.builtin.set_fact:
-    product_info: '{{ product_info.content | b64decode | from_json }}'
+- name: Create launcher and link to executable
+  vars:
+    product_info: '{{ read_product_info.content | b64decode | from_json }}'
+  block:
+    - name: Ensure desktop launcher exists
+      ansible.builtin.template:
+        src: templates/launcher.desktop.j2
+        dest: '{{ jetbrains_launcher_dir }}/{{ product_info.launch.0.startupWmClass }}.desktop'
+        owner: '{{ jetbrains_user }}'
+        group: '{{ jetbrains_user }}'
+        mode: '644'
 
-- name: Ensure desktop launcher exists
-  ansible.builtin.template:
-    src: templates/launcher.desktop.j2
-    dest: '{{ jetbrains_launcher_dir }}/{{ product_info.launch.0.startupWmClass }}.desktop'
-    owner: '{{ jetbrains_user }}'
-    group: '{{ jetbrains_user }}'
-    mode: '644'
+    - name: Ensure link to executable exists
+      ansible.builtin.file:
+        src: '{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}'
+        dest: '{{ jetbrains_binary_dir }}/{{ product_info.name | lower }}'
+        state: link
+        owner: '{{ jetbrains_user }}'
+        group: '{{ jetbrains_user }}'
+      when: jetbrains_link_executable | bool
 
-- name: Ensure link to executable exists
-  ansible.builtin.file:
-    src: '{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}'
-    dest: '{{ jetbrains_binary_dir }}/{{ product_info.name | lower }}'
-    state: link
-    owner: '{{ jetbrains_user }}'
-    group: '{{ jetbrains_user }}'
-  when: jetbrains_link_executable | bool
 
 - name: Find previously installed IDE versions
   ansible.builtin.find:
