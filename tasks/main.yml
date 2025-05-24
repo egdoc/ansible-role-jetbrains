@@ -2,6 +2,7 @@
 - name: Request IDE information
   ansible.builtin.uri:
     url: '{{ jetbrains_products_url }}?code={{ jetbrains_ide_code }}'
+  delegate_to: localhost
   register: products
 
 - name: Verify requested IDE version is valid
@@ -10,29 +11,37 @@
     msg: 'version {{ jetbrains_ide_version }} not found, availables ones are: {{ ide_available_versions }}'
   vars:
     ide_available_versions: '{{ products.json.0.releases | map(attribute="version") }}'
+  delegate_to: localhost
+
+- name: Download tarball
+  ansible.builtin.get_url:
+    url: '{{ product.link }}'
+    dest: '{{ jetbrains_local_download_dir }}/{{ product.link | basename }}'
+    checksum: sha256:{{ product.checksumLink }}
+  vars:
+    product: '{{ (products.json.0.releases | selectattr("version", "eq", jetbrains_ide_version) | first).downloads.linux }}'
+  delegate_to: localhost
+  register: downloaded_tarball
 
 - name: Ensure installation directory exists on target
   ansible.builtin.file:
-    path: '{{ jetbrains_installation_dir }}/{{ products.json.0.name | lower | replace(" ", "-") }}/{{ jetbrains_ide_version }}'
+    path: '{{ jetbrains_installation_dir }}'
     state: directory
     owner: '{{ jetbrains_user }}'
     group: '{{ jetbrains_user }}'
     mode: '755'
-  register: created_ide_directory
 
 - name: Extract tarball
   ansible.builtin.unarchive:
-    src: '{{ (products.json.0.releases | selectattr("version", "eq", jetbrains_ide_version) | first).downloads.linux.link }}'
-    dest: '{{ created_ide_directory.path }}'
+    src: '{{ downloaded_tarball.dest }}'
+    dest: '{{ jetbrains_installation_dir }}'
     list_files: true
-    remote_src: true
-    extra_opts:
-      - --strip-components=1
-  when: created_ide_directory.changed or jetbrains_force_reinstall | bool
+    remote_src: false
+  register: extracted_tarball
 
 - name: Read product-info.json
   ansible.builtin.slurp:
-    src: '{{ created_ide_directory.path }}/product-info.json'
+    src: '{{ jetbrains_installation_dir }}/{{ extracted_tarball.files.0 }}/product-info.json'
   register: read_product_info
 
 - name: Create launcher and link to executable
@@ -49,7 +58,7 @@
 
     - name: Ensure link to executable exists
       ansible.builtin.file:
-        src: '{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}'
+        src: '{{ jetbrains_installation_dir }}/{{ extracted_tarball.files.0 }}/{{ product_info.launch.0.launcherPath }}'
         dest: '{{ jetbrains_binary_dir }}/{{ product_info.name | lower }}'
         state: link
         owner: '{{ jetbrains_user }}'

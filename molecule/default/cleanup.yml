@@ -1,0 +1,8 @@
+---
+- name: Cleanup
+  hosts: localhost
+  tasks:
+    - name: Ensure downloaded tarball is removed
+      ansible.builtin.file:
+        path: /tmp/pycharm-community-2022.3.1.tar.gz
+        state: absent

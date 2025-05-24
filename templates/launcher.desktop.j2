@@ -2,8 +2,8 @@
 Version=1.0
 Type=Application
 Name={{ product_info.name }}
-Icon={{ created_ide_directory.path }}/{{ product_info.svgIconPath }}
-Exec="{{ created_ide_directory.path }}/{{ product_info.launch.0.launcherPath }}" %f
+Icon={{ jetbrains_installation_dir }}/{{ extracted_tarball.files.0 }}/{{ product_info.svgIconPath }}
+Exec="{{ jetbrains_installation_dir }}/{{ extracted_tarball.files.0 }}/{{ product_info.launch.0.launcherPath }}" %f
 Categories=Development;IDE
 Terminal=false
 StartupWMClass={{ product_info.launch.0.startupWmClass }}

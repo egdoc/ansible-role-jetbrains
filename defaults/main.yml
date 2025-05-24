@@ -1,7 +1,7 @@
 ---
+jetbrains_local_download_dir: /tmp
 jetbrains_installation_dir: /opt/jetbrains
 jetbrains_launcher_dir: /usr/local/share/applications
 jetbrains_binary_dir: /usr/local/bin
 jetbrains_user: root
 jetbrains_link_executable: false
-jetbrains_force_reinstall: false

@@ -15,9 +15,9 @@ argument_specs:
         type: str
       jetbrains_link_executable:
         type: bool
-      jetbrains_force_reinstall:
-        type: bool
-        default: false
+      jetbrains_local_download_dir:
+        type: str
+        default: /tmp
       jetbrains_launcher_dir:
         type: str
         default: /usr/local/share/applications

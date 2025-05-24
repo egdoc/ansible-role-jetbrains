@@ -14,6 +14,10 @@ The code of the Jetbrains IDE you want to download and install
 
 The version of the Jetbrains IDE you want to download and install (e.g: 2023.3.1)
 
+        jetbrains_local_download_dir: /tmp
+
+The directory on the control node where to download the IDE tarball
+
         jetbrains_installation_dir: /opt/jetbrains
 
 The root installation directory
@@ -37,12 +41,6 @@ The user who will own IDE files and directories
         jetbrains_link_executable: false
 
 Whether to create a link to the IDE executable under `jetbrains_binary_dir`
-
-        jetbrains_force_reinstall: false
-
-Whether to force re-installation of the IDE even if it appears to be
-installed (directory exists). This can be useful if you want to be
-sure all files are in place.
 
 Dependencies
 ------------
