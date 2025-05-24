@@ -3,6 +3,5 @@ jetbrains_installation_dir: /opt/jetbrains
 jetbrains_launcher_dir: /usr/local/share/applications
 jetbrains_binary_dir: /usr/local/bin
 jetbrains_user: root
-jetbrains_remove_other_versions: true
 jetbrains_link_executable: false
 jetbrains_force_reinstall: false

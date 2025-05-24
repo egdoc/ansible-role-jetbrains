@@ -13,8 +13,6 @@ argument_specs:
         required: true
       jetbrains_installation_dir:
         type: str
-      jetbrains_remove_other_versions:
-        type: bool
       jetbrains_link_executable:
         type: bool
       jetbrains_force_reinstall:
