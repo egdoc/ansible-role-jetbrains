@@ -5,19 +5,17 @@ argument_specs:
     description: Ansible role to install Jetbrains IDEs on Linux
     author: Egidio Docile
     options:
-      jetbrains_ide_version:
-        type: str
-        required: true
       jetbrains_ide_code:
         type: str
         required: true
-      jetbrains_installation_dir:
+      jetbrains_ide_version:
         type: str
-      jetbrains_link_executable:
-        type: bool
+        required: true
       jetbrains_local_download_dir:
         type: str
         default: /tmp
+      jetbrains_installation_dir:
+        type: str
       jetbrains_launcher_dir:
         type: str
         default: /usr/local/share/applications
@@ -27,3 +25,5 @@ argument_specs:
       jetbrains_user:
         type: str
         default: root
+      jetbrains_link_executable:
+        type: bool
