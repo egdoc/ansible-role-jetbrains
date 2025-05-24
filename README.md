@@ -22,7 +22,7 @@ The root installation directory
 
 Controls whether previously installed IDE versions are removed after installation
 
-        jetbrains_releases_url: https://data.services.jetbrains.com/products/releases
+        jetbrains_products_url: https://data.services.jetbrains.com/products
 
 The URL used to retrieve information about the IDE
 
