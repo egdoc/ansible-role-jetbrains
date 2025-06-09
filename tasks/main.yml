@@ -18,6 +18,7 @@
     url: '{{ product.link }}'
     dest: '{{ jetbrains_local_download_dir }}/{{ product.link | basename }}'
     checksum: sha256:{{ product.checksumLink }}
+    mode: '644'
   vars:
     product: '{{ (products.json.0.releases | selectattr("version", "eq", jetbrains_ide_version) | first).downloads.linux }}'
   delegate_to: localhost
