@@ -1,5 +1,6 @@
 Ansible Role: Jetbrains
 ==================
+[![CI](https://github.com/egdoc/ansible-role-jetbrains/actions/workflows/ci.yml/badge.svg)](https://github.com/egdoc/ansible-role-jetbrains/actions/workflows/ci.yml)
 
 Ansible role to install Jetbrains IDEs on Linux. The role downloads, verifies,
 and installs the selected IDE. It also creates desktop launchers.
