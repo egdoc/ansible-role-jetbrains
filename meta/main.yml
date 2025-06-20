@@ -1,5 +1,6 @@
 galaxy_info:
-  author: egdoc
+  author: Egidio Docile
+  namespace: egdoc
   role_name: jetbrains
   description: Ansible role to install Jetbrains IDEs
   license: GPLv2
