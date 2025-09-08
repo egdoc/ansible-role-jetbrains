@@ -27,3 +27,4 @@ argument_specs:
         default: root
       jetbrains_link_executable:
         type: bool
+        default: false
